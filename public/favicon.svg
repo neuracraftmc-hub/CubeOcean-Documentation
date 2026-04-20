@@ -1,0 +1,51 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Glow Background -->
+  <circle cx="128" cy="128" r="90" fill="url(#glow)" opacity="0.12"></circle>
+
+  <!-- Main Cube -->
+  <path d="M128 36L194 74V146L128 184L62 146V74L128 36Z" fill="url(#cubeMain)"></path>
+
+  <!-- Top Face -->
+  <path d="M128 36L194 74L128 112L62 74L128 36Z" fill="url(#cubeTop)"></path>
+
+  <!-- Left Face -->
+  <path d="M62 74L128 112V184L62 146V74Z" fill="url(#cubeLeft)"></path>
+
+  <!-- Right Face -->
+  <path d="M194 74L128 112V184L194 146V74Z" fill="url(#cubeRight)"></path>
+
+  <!-- Cloud Center -->
+  <path d="M105 126C105 114 114 106 126 106C130 93 141 86 154 86C171 86 185 100 185 117C196 119 204 128 204 140C204 155 192 166 177 166H117C101 166 89 154 89 140C89 130 95 122 105 126Z" fill="white" opacity="0.97"></path>
+
+  <!-- Gradient Definitions -->
+  <defs>
+
+    <linearGradient id="cubeMain" x1="62" y1="36" x2="194" y2="184">
+      <stop stop-color="#2563EB"></stop>
+      <stop offset="1" stop-color="#06B6D4"></stop>
+    </linearGradient>
+
+    <linearGradient id="cubeTop" x1="62" y1="36" x2="194" y2="112">
+      <stop stop-color="#60A5FA"></stop>
+      <stop offset="1" stop-color="#22D3EE"></stop>
+    </linearGradient>
+
+    <linearGradient id="cubeLeft" x1="62" y1="74" x2="128" y2="184">
+      <stop stop-color="#1D4ED8"></stop>
+      <stop offset="1" stop-color="#0EA5E9"></stop>
+    </linearGradient>
+
+    <linearGradient id="cubeRight" x1="128" y1="74" x2="194" y2="184">
+      <stop stop-color="#0284C7"></stop>
+      <stop offset="1" stop-color="#06B6D4"></stop>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(128 128) rotate(90) scale(90)">
+      <stop stop-color="#38BDF8"></stop>
+      <stop offset="1" stop-color="#38BDF8" stop-opacity="0"></stop>
+    </radialGradient>
+
+  </defs>
+
+</svg>

@@ -1,0 +1,15 @@
+---
+import { navigation } from '../utils/navigation';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'id' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const defaultPage = navigation[lang]?.[0]?.items?.[0]?.href ?? '/en/product';
+
+throw Astro.redirect(defaultPage, 307);
+---

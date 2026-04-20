@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import Doc from '../../layouts/Doc.astro';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  const paths: any[] = [];
+  
+  for (const doc of docs) {
+    if (!doc || !doc.id) {
+      continue;
+    }
+    
+    // Extract lang and slug from id like 'en/architecture'
+    const [lang, ...slugParts] = doc.id.split('/');
+    const slug = slugParts.join('/');
+    
+    paths.push({
+      params: { lang, slug },
+      props: { doc },
+    });
+  }
+  
+  return paths;
+}
+
+interface Props {
+  doc: any;
+}
+
+const { doc } = Astro.props;
+const { lang, slug } = Astro.params;
+
+if (!doc) {
+  return Astro.redirect('/404');
+}
+
+const title = doc.data.title || 'Untitled';
+const description = doc.data.description || '';
+const html = doc.rendered?.html || '';
+---
+
+<Doc 
+  title={title}
+  description={description}
+  slug={slug}
+  currentLang={lang}
+  currentPage={`/${lang}/${slug}`}
+  currentSlug={slug}
+>
+  <Fragment set:html={html} />
+</Doc>

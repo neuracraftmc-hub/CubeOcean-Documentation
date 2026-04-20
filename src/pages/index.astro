@@ -1,0 +1,272 @@
+---
+// Redirect to the first documentation page
+return Astro.redirect('/en/product');
+---
+            <a href="/id/produk" class="btn btn-secondary">Mulai Sekarang</a>
+          </div>
+        </div>
+
+        <div class="hero-image">
+          <div class="floating-card card-1">
+            <div class="card-header">CubeOceanCloud</div>
+            <div class="card-content">
+              Fast & Modern
+            </div>
+          </div>
+          <div class="floating-card card-2">
+            <div class="card-header">Elegant</div>
+            <div class="card-content">
+              Professional Design
+            </div>
+          </div>
+          <div class="floating-card card-3">
+            <div class="card-header">Awesome</div>
+            <div class="card-content">
+              Multi-Language
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>
+
+<style>
+  .hero {
+    min-height: calc(100vh - 100px);
+    background: linear-gradient(135deg, 
+      var(--color-bg) 0%,
+      var(--color-code-bg) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1400px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .hero-content h1 {
+    margin-top: 0;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--color-text);
+    opacity: 0.8;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+
+  .hero-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .feature-card {
+    background: var(--color-bg);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+    cursor: pointer;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--color-primary);
+    box-shadow: 0 12px 24px rgba(59, 130, 246, 0.15);
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: var(--color-text);
+  }
+
+  .feature-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-text);
+    opacity: 0.7;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn {
+    padding: 0.9rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4);
+  }
+
+  .btn-secondary {
+    background: var(--color-code-bg);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* Floating cards */
+  .hero-image {
+    position: relative;
+    height: 400px;
+    perspective: 1000px;
+  }
+
+  .floating-card {
+    position: absolute;
+    background: var(--color-bg);
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .card-header {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-content {
+    color: var(--color-text);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .card-1 {
+    width: 200px;
+    top: 20px;
+    left: 0;
+    animation-delay: 0s;
+  }
+
+  .card-2 {
+    width: 200px;
+    top: 150px;
+    right: 0;
+    animation-delay: 1s;
+  }
+
+  .card-3 {
+    width: 200px;
+    bottom: 20px;
+    left: 80px;
+    animation-delay: 2s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @media (max-width: 1024px) {
+    .hero-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .hero-image {
+      display: none;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+    }
+
+    .hero-features {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      min-height: calc(100vh - 120px);
+      padding: 1rem;
+    }
+
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+</style>

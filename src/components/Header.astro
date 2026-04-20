@@ -1,0 +1,665 @@
+---
+import { getSwitchLanguageUrl } from '../utils/navigation';
+
+interface Props {
+  currentLang: 'en' | 'id';
+  title?: string;
+  currentSlug?: string;
+}
+
+const { currentLang, title = 'CubeOcean Cloud', currentSlug = '' } = Astro.props;
+
+const t = {
+  en: {
+    search: 'Search...'
+  },
+  id: {
+    search: 'Cari...'
+  }
+};
+
+const strings = t[currentLang];
+const switchLangUrl = getSwitchLanguageUrl(currentLang, currentSlug || '');
+const englishHref = currentLang === 'en' ? '#' : switchLangUrl;
+const indonesiaHref = currentLang === 'id' ? '#' : switchLangUrl;
+---
+
+<header class="header">
+  <div class="container">
+    <div class="header-left">
+      <h1 class="logo">{title}</h1>
+    </div>
+    
+    <div class="header-center">
+      <div class="search-box">
+        <input 
+          type="text" 
+          id="search-input"
+          placeholder={strings.search}
+          class="search-input"
+        />
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="currentColor" stroke-width="2"/>
+          <path d="M19 19L14.5 14.5" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <div id="search-results" class="search-results"></div>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <!-- Language Dropdown -->
+      <div class="lang-selector">
+        <button id="lang-toggle-btn" class="lang-toggle" aria-label="Change language">
+          <svg class="lang-translate" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            <path d="M2 12h20"></path>
+          </svg>
+        </button>
+        <div class="lang-dropdown">
+          <a href={englishHref} class={`lang-option ${currentLang === 'en' ? 'active' : ''}`}>
+            <span>English</span>
+          </a>
+          <a href={indonesiaHref} class={`lang-option ${currentLang === 'id' ? 'active' : ''}`}>
+            <span>Bahasa Indonesia</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Theme Slider -->
+      <div class="theme-slider-wrapper">
+        <button id="theme-toggle" class="theme-slider" aria-label="Toggle theme">
+          <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <span class="slider-track"></span>
+          <span class="slider-thumb"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    background-color: var(--color-bg);
+    border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+    padding: 0.4rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    background-color: color-mix(in srgb, var(--color-bg) 95%, transparent);
+    animation: slideInDown 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  html[data-theme="light"] .header {
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0;
+  }
+
+  .header-left {
+    flex-shrink: 0;
+  }
+
+  .logo {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+    background: linear-gradient(135deg, var(--color-secondary), var(--color-blue-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    white-space: nowrap;
+  }
+
+  .logo:hover {
+    transform: scale(1.05);
+  }
+
+  .header-center {
+    flex: 1;
+    max-width: 300px;
+  }
+
+  .search-box {
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem 0.5rem 2.2rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: 8px;
+    background-color: var(--color-code-bg);
+    color: var(--color-text);
+    font-size: 0.85rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--color-blue);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), 0 4px 12px rgba(59, 130, 246, 0.15);
+    transform: scale(1.01);
+  }
+
+  .search-input::placeholder {
+    color: var(--color-text);
+    opacity: 0.5;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .search-input:focus ~ .search-icon {
+    opacity: 0.7;
+    color: var(--color-blue);
+  }
+
+  .search-results {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 10;
+    display: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .search-results.active {
+    display: block;
+    animation: slideDown 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .search-result {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .search-result:last-child {
+    border-bottom: none;
+  }
+
+  .search-result:hover {
+    background-color: var(--color-code-bg);
+    padding-left: 1.2rem;
+  }
+
+  .search-result-title {
+    font-weight: 600;
+    color: var(--color-text);
+    transition: color 0.2s;
+  }
+
+  .search-result:hover .search-result-title {
+    color: var(--color-blue);
+  }
+
+  .search-result-desc {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    opacity: 0.6;
+    margin-top: 0.25rem;
+  }
+
+  .header-right {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    flex-shrink: 0;
+    animation: slideInRight 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Language Selector */
+  .lang-selector {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.65;
+    transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .lang-toggle:hover {
+    opacity: 0.9;
+    color: var(--color-blue);
+  }
+
+  .lang-translate {
+    width: 14px;
+    height: 14px;
+  }
+
+  .lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--color-bg);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 8px;
+    min-width: 140px;
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    margin-top: 0.4rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideDown 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .lang-dropdown.active {
+    display: flex;
+  }
+
+  .lang-option {
+    padding: 0.6rem 1rem;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    opacity: 0.65;
+  }
+
+  .lang-option:last-child {
+    border-bottom: none;
+  }
+
+  .lang-option:hover {
+    background-color: rgba(59, 130, 246, 0.08);
+    opacity: 0.9;
+    color: var(--color-blue);
+  }
+
+  .lang-option.active {
+    color: var(--color-blue);
+    font-weight: 600;
+    opacity: 1;
+    background-color: rgba(59, 130, 246, 0.05);
+  }
+
+  /* Theme Slider */
+  .theme-slider-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .theme-slider {
+    position: relative;
+    width: 44px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .icon-moon,
+  .icon-sun {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    color: var(--color-blue);
+    transition: opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 1;
+  }
+
+  .icon-moon {
+    left: 4px;
+    opacity: 1;
+  }
+
+  html[data-theme="light"] .icon-moon {
+    opacity: 0.4;
+  }
+
+  .icon-sun {
+    right: 4px;
+    opacity: 0.4;
+  }
+
+  html[data-theme="light"] .icon-sun {
+    opacity: 1;
+    color: var(--color-blue-light);
+  }
+
+  .slider-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: rgba(59, 130, 246, 0.2);
+    border-radius: 6px;
+    transition: background 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 0;
+  }
+
+  html[data-theme="light"] .slider-track {
+    background: rgba(59, 130, 246, 0.2);
+  }
+
+  .slider-thumb {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: var(--color-blue);
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    left: 2px;
+    z-index: 2;
+  }
+
+  html[data-theme="light"] .slider-thumb {
+    left: 28px;
+    background: var(--color-blue-light);
+  }
+
+  .theme-slider:hover .slider-thumb {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 1024px) {
+    .container {
+      flex-wrap: wrap;
+      gap: 0.2rem;
+    }
+
+    .header-center {
+      flex: 1;
+      min-width: 200px;
+      order: 3;
+    }
+
+    .header-right {
+      gap: 0.2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      gap: 0.2rem;
+      padding: 0 1rem;
+    }
+
+    .header-left {
+      order: 1;
+    }
+
+    .header-center {
+      order: 3;
+      flex: 1;
+      min-width: 100%;
+    }
+
+    .header-right {
+      order: 2;
+      gap: 0.2rem;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+    }
+
+    .search-input {
+      padding: 0.6rem 1rem 0.6rem 2.2rem;
+      font-size: 0.9rem;
+    }
+
+    .search-icon {
+      left: 0.7rem;
+    }
+
+    .lang-toggle {
+      font-size: 0.75rem;
+    }
+
+    .theme-slider {
+      width: 40px;
+      height: 20px;
+    }
+
+    .slider-thumb {
+      width: 14px;
+      height: 14px;
+      left: 2px;
+    }
+
+    html[data-theme="light"] .slider-thumb {
+      left: 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .header {
+      padding: 0.9rem 0;
+    }
+
+    .container {
+      gap: 0.5rem;
+      padding: 0 0.75rem;
+    }
+
+    .header-center {
+      min-width: 100%;
+    }
+
+    .header-right {
+      gap: 0.5rem;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+    }
+
+    .search-input {
+      padding: 0.5rem 0.8rem 0.5rem 2rem;
+      font-size: 0.85rem;
+      border-radius: 8px;
+    }
+
+    .lang-toggle {
+      font-size: 0.7rem;
+    }
+
+    .theme-slider {
+      width: 36px;
+      height: 18px;
+    }
+
+    .slider-thumb {
+      width: 12px;
+      height: 12px;
+    }
+
+    html[data-theme="light"] .slider-thumb {
+      left: 22px;
+    }
+  }
+</style>
+
+<script>
+  // Language dropdown toggle
+  const langToggleBtn = document.getElementById('lang-toggle-btn');
+  const langDropdown = document.querySelector('.lang-dropdown');
+
+  langToggleBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    langDropdown?.classList.toggle('active');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!langDropdown?.contains(e.target as Node) && e.target !== langToggleBtn) {
+      langDropdown?.classList.remove('active');
+    }
+  });
+
+  // Theme toggle slider
+  const themeToggle = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+
+  // Check localStorage for saved theme, default to dark
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  setTheme(savedTheme);
+
+  function setTheme(theme: string) {
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  themeToggle?.addEventListener('click', () => {
+    const currentTheme = html.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+  });
+
+  // Search functionality
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const searchResults = document.getElementById('search-results') as HTMLElement;
+
+  const pages = [
+    { title: 'Product', slug: { en: 'product', id: 'produk' } },
+    { title: 'Feutures', slug: { en: 'feutures', id: 'fitur' } },
+    { title: 'Pricing', slug: { en: 'pricing', id: 'harga' } },
+    { title: 'Getting Started', slug: { en: 'getting-started', id: 'memulai' } },
+    { title: 'Installation', slug: { en: 'installation', id: 'instalasi' } },
+    { title: 'API Reference', slug: { en: 'api', id: 'api' } },
+    { title: 'Guides', slug: { en: 'guides', id: 'panduan' } },
+    { title: 'About', slug: { en: 'about', id: 'tentang' } },
+    { title: 'Blog', slug: { en: 'blog', id: 'blog' } },
+    { title: 'Contact', slug: { en: 'contact', id: 'kontak' } },
+    { title: 'Careers', slug: { en: 'careers', id: 'karir' } },
+    { title: 'Help Center', slug: { en: 'support/help-center', id: 'dukungan/pusat-bantuan' } },
+    { title: 'Community', slug: { en: 'support/community', id: 'dukungan/community' } },
+    { title: 'Status', slug: { en: 'support/status', id: 'dukungan/status' } },
+    { title: 'Support', slug: { en: 'support/contact', id: 'dukungan/contact' } },
+    { title: 'Privacy Policy', slug: { en: 'legal/privacy-policy', id: 'legal/privacy-policy' } },
+    { title: 'Terms', slug: { en: 'legal/terms-of-service', id: 'legal/terms-of-service' } },
+    { title: 'Refund', slug: { en: 'legal/refund-policy', id: 'legal/refund-policy' } },
+    { title: 'Cookies', slug: { en: 'legal/cookie-policy', id: 'legal/cookie-policy' } },
+  ];
+
+  searchInput?.addEventListener('input', (e) => {
+    const query = (e.target as HTMLInputElement).value.toLowerCase();
+    
+    if (query.length < 1) {
+      searchResults.classList.remove('active');
+      return;
+    }
+
+    const results = pages.filter(p => 
+      p.title.toLowerCase().includes(query) || 
+      Object.values(p.slug).some(s => s.toLowerCase().includes(query))
+    );
+
+    if (results.length === 0) {
+      searchResults.innerHTML = '<div style="padding: 1rem; text-align: center; opacity: 0.5;">No results found</div>';
+      searchResults.classList.add('active');
+      return;
+    }
+
+    const currentLang = window.location.pathname.split('/')[1] || 'en';
+    searchResults.innerHTML = results.map(r => `
+      <a href="/${currentLang}/${r.slug[currentLang]}" class="search-result" style="text-decoration: none; display: block; color: inherit;">
+        <div class="search-result-title">${r.title}</div>
+      </a>
+    `).join('');
+    searchResults.classList.add('active');
+  });
+
+  // Close search results when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!searchInput?.contains(e.target as Node) && !searchResults?.contains(e.target as Node)) {
+      searchResults?.classList.remove('active');
+    }
+  });
+</script>

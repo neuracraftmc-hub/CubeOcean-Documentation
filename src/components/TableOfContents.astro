@@ -1,0 +1,172 @@
+---
+interface Props {
+  headings: Array<{
+    depth: number;
+    slug: string;
+    text: string;
+  }>;
+  currentLang: 'en' | 'id';
+}
+
+const { headings, currentLang } = Astro.props;
+
+// Filter only h2 and h3 headings
+const filteredHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+
+const labels = {
+  en: 'On this page',
+  id: 'Di halaman ini'
+};
+---
+
+{filteredHeadings.length > 0 && (
+  <aside class="toc">
+    <nav>
+      <p class="toc-title">{labels[currentLang as 'en' | 'id']}</p>
+      <ul class="toc-list">
+        {filteredHeadings.map((heading) => (
+          <li key={heading.slug} class={`toc-item toc-depth-${heading.depth}`}>
+            <a href={`#${heading.slug}`} class="toc-link">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </aside>
+)}
+
+<style>
+  .toc {
+    width: 280px;
+    padding: 3.5rem 2rem 2rem 2rem;
+    position: sticky;
+    top: 100px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    flex-shrink: 0;
+    border-left: 1px solid rgba(59, 130, 246, 0.2);
+    animation: slideInDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  }
+
+  html[data-theme="dark"] .toc {
+    border-left: 1px solid rgba(59, 130, 246, 0.15);
+  }
+
+  .toc-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    margin-bottom: 1.8rem;
+    color: var(--color-text);
+    opacity: 0.5;
+    margin: 0;
+    transition: opacity 0.3s;
+  }
+
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .toc-item {
+    margin: 0;
+  }
+
+  .toc-depth-2 {
+    padding-left: 0;
+  }
+
+  .toc-depth-3 {
+    padding-left: 0;
+    opacity: 0.6;
+  }
+
+  .toc-link {
+    font-size: 0.9rem;
+    display: block;
+    padding: 0.6rem 0;
+    transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+    border-bottom: 2px solid transparent;
+    color: var(--color-text);
+    opacity: 0.65;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .toc-link:hover {
+    color: var(--color-blue-light);
+    opacity: 0.9;
+    padding-top: 0.6rem;
+    transform: translateY(-2px);
+  }
+
+  .toc-link.active {
+    color: var(--color-blue);
+    border-bottom-color: var(--color-blue);
+    font-weight: 500;
+    opacity: 1;
+  }
+
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scrollbar styling */
+  .toc::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .toc::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .toc::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.3);
+    border-radius: 3px;
+    transition: background 0.3s;
+  }
+
+  .toc::-webkit-scrollbar-thumb:hover {
+    background: var(--color-blue-light);
+  }
+
+  @media (max-width: 1400px) {
+    .toc {
+      width: 260px;
+      padding: 3rem 1.5rem 2rem 1.5rem;
+    }
+
+    .toc-link {
+      font-size: 0.85rem;
+      padding: 0.5rem 0;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .toc {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .toc {
+      display: none;
+    }
+  }
+</style>

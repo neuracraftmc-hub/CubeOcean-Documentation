@@ -1,0 +1,139 @@
+---
+import Main from './Main.astro';
+import { formatDate } from '../utils/dates.server';
+
+interface Props {
+  title: string;
+  description?: string;
+  slug?: string;
+  currentLang?: 'en' | 'id';
+  currentPage?: string;
+  currentSlug?: string;
+  siteTitle?: string;
+  lastUpdated?: string;
+}
+
+const { 
+  title, 
+  description = '',
+  slug = '',
+  currentLang = 'en',
+  currentPage = '',
+  currentSlug = slug,
+  siteTitle = 'CubeOceanCloud',
+  lastUpdated = new Date().toISOString()
+} = Astro.props;
+
+// Extract headings from slot
+const content = await Astro.slots.render('default');
+// Match h2 and h3 tags with id attribute
+const headingMatches = content.matchAll(/<h([2-3])[^>]*id="([^"]*)"[^>]*>(.+?)<\/h\1>/gs);
+const headings: Array<{ depth: number; slug: string; text: string }> = [];
+
+for (const match of headingMatches) {
+  const depth = parseInt(match[1]);
+  const slug = match[2];
+  // Remove any HTML tags from text content
+  const text = match[3]
+    .replace(/<[^>]*>/g, '') // Remove all HTML tags
+    .trim();
+  
+  if (text) {
+    headings.push({ depth, slug, text });
+  }
+}
+---
+
+<Main 
+  title={title} 
+  description={description}
+  headings={headings}
+  currentLang={currentLang}
+  currentPage={currentPage}
+  currentSlug={currentSlug}
+  siteTitle={siteTitle}
+>
+  <div class="doc-header">
+    <h1 id="main-title">{title}</h1>
+    {description && <p class="doc-description">{description}</p>}
+    <div class="doc-meta">
+      <span class="last-updated">
+        {currentLang === 'en' ? 'Last updated:' : 'Terakhir diperbarui:'}
+        <time>{formatDate(lastUpdated, currentLang)}</time>
+      </span>
+    </div>
+  </div>
+
+  <div class="doc-content">
+    <slot />
+  </div>
+</Main>
+
+<style>
+  .doc-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  #main-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+
+  .doc-description {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    opacity: 0.8;
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+  }
+
+  .doc-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .last-updated {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--color-text);
+    opacity: 0.7;
+    background-color: var(--color-code-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+  }
+
+  time {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .doc-content {
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .doc-header {
+      margin-bottom: 2rem;
+    }
+
+    #main-title {
+      font-size: 1.8rem;
+    }
+
+    .doc-description {
+      font-size: 1rem;
+    }
+
+    .last-updated {
+      font-size: 0.85rem;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+</style>

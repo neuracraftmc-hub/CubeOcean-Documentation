@@ -1,0 +1,144 @@
+---
+interface Props {
+  currentLang: 'en' | 'id';
+  currentSlug: string;
+}
+
+const { currentLang, currentSlug } = Astro.props;
+
+const breadcrumbLabels = {
+  en: {
+    product: 'Product',
+    feutures: 'Feutures',
+    pricing: 'Pricing',
+    'getting-started': 'Getting Started',
+    installation: 'Installation',
+    api: 'API Reference',
+    guides: 'Guides & Tutorials',
+    about: 'About',
+    blog: 'Blog',
+    contact: 'Contact',
+    careers: 'Careers',
+    'support/help-center': 'Help Center',
+    'support/community': 'Community Forums',
+    'support/status': 'Status',
+    'support/contact': 'Contact Support',
+    'legal/privacy-policy': 'Privacy Policy',
+    'legal/terms-of-service': 'Terms of Service',
+    'legal/refund-policy': 'Refund Policy',
+    'legal/cookie-policy': 'Cookie Policy',
+  },
+  id: {
+    produk: 'Produk',
+    fitur: 'Fitur',
+    harga: 'Harga',
+    memulai: 'Memulai',
+    instalasi: 'Instalasi',
+    api: 'Referensi API',
+    panduan: 'Panduan & Tutorial',
+    tentang: 'Tentang',
+    blog: 'Blog',
+    kontak: 'Kontak',
+    karir: 'Karir',
+    'dukungan/pusat-bantuan': 'Pusat Bantuan',
+    'dukungan/community': 'Forum Komunitas',
+    'dukungan/status': 'Status',
+    'dukungan/contact': 'Hubungi Dukungan',
+    'legal/privacy-policy': 'Privacy Policy',
+    'legal/terms-of-service': 'Terms of Service',
+    'legal/refund-policy': 'Refund Policy',
+    'legal/cookie-policy': 'Cookie Policy',
+  }
+};
+
+const labels = breadcrumbLabels[currentLang as 'en' | 'id'];
+const pageName = labels[currentSlug as keyof typeof labels] || currentSlug;
+---
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li>
+      <a href={`/${currentLang}`}>{currentLang === 'en' ? 'Home' : 'Beranda'}</a>
+    </li>
+    <li>
+      <span aria-current="page">{pageName}</span>
+    </li>
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb {
+    margin-bottom: 2.5rem;
+    padding: 0;
+  }
+
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 0.7rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  li:not(:last-child)::after {
+    content: '→';
+    margin-left: 0.7rem;
+    color: var(--color-text);
+    opacity: 0.3;
+    font-weight: 300;
+  }
+
+  a {
+    color: var(--color-blue-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    opacity: 0.85;
+  }
+
+  a:hover {
+    opacity: 1;
+    color: var(--color-primary);
+  }
+
+  span {
+    color: var(--color-text);
+    font-weight: 500;
+    opacity: 0.75;
+  }
+
+  @media (max-width: 768px) {
+    .breadcrumb {
+      margin-bottom: 1.75rem;
+    }
+
+    ol {
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    li:not(:last-child)::after {
+      margin-left: 0.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .breadcrumb {
+      margin-bottom: 1.5rem;
+    }
+
+    ol {
+      font-size: 0.8rem;
+    }
+  }
+</style>

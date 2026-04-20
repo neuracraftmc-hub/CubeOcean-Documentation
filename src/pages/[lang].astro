@@ -9,7 +9,8 @@ export async function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-const defaultPage = navigation[lang]?.[0]?.items?.[0]?.href ?? '/en/product';
+const defaultPage =
+  navigation?.[lang]?.[0]?.items?.[0]?.href ?? '/en/product';
 
-throw Astro.redirect(defaultPage, 307);
+return Astro.redirect(defaultPage, 307);
 ---

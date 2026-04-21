@@ -1,8 +1,8 @@
 ---
 // Redirect to the first documentation page
-return Astro.redirect('/en/product');
+return Astro.redirect(import.meta.env.BASE_URL + 'en/product');
 ---
-            <a href="/id/produk" class="btn btn-secondary">Mulai Sekarang</a>
+            <a href={`${import.meta.env.BASE_URL}id/produk`} class="btn btn-secondary">Start now</a>
           </div>
         </div>
 
